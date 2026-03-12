@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RS VIP | Play & Earn</title>
+    <title>RSP | Play & Earn</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
@@ -15,70 +15,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* 🎨 Custom CSS & Theme */
         :root {
             --main-green: #22c55e;
             --light-green: #dcfce3;
             --dark-green: #16a34a;
             --bg-color: #f0fdf4;
         }
-        body {
-            font-family: 'Prompt', sans-serif;
-            background-color: var(--bg-color);
-            color: #1f2937;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Glassmorphism Panels */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(34, 197, 94, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        /* Animations */
+        body { font-family: 'Prompt', sans-serif; background-color: var(--bg-color); color: #1f2937; -webkit-tap-highlight-color: transparent; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 20px; box-shadow: 0 8px 32px rgba(34, 197, 94, 0.08); border: 1px solid rgba(255, 255, 255, 0.5); }
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* Loader */
-        #page-loader {
-            position: fixed; inset: 0; z-index: 9999;
-            background: linear-gradient(135deg, #ffffff, #f0fdf4);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.4s ease;
-        }
+        #page-loader { position: fixed; inset: 0; z-index: 9999; background: linear-gradient(135deg, #ffffff, #f0fdf4); display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.4s ease; }
         .pulse-logo { animation: pulseLogo 1.5s infinite; }
         @keyframes pulseLogo { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         /* Game Custom CSS */
-        .football-field {
-            background: linear-gradient(to bottom, #16a34a, #22c55e);
-            border: 3px solid white; border-radius: 12px;
-            position: relative; overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
-        }
-        .goal-net {
-            position: absolute; top: 0; left: 10%; width: 80%; height: 60px;
-            border: 3px solid white; border-top: none; border-radius: 0 0 10px 10px;
-            background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.3) 75%, rgba(255,255,255,0.3)), linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.3) 75%, rgba(255,255,255,0.3));
-            background-size: 10px 10px;
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
-        /* Bottom Nav Active State */
+        .football-field { background: linear-gradient(to bottom, #16a34a, #22c55e); border: 3px solid white; border-radius: 12px; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); }
+        .goal-net { position: absolute; top: 0; left: 10%; width: 80%; height: 60px; border: 3px solid white; border-top: none; border-radius: 0 0 10px 10px; background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.3) 75%, rgba(255,255,255,0.3)), linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.3) 75%, rgba(255,255,255,0.3)); background-size: 10px 10px; }
+        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .nav-btn { color: #94a3b8; transition: all 0.3s; }
         .nav-btn.active { color: var(--main-green); transform: translateY(-3px); }
-        .nav-btn.active::after {
-            content: ''; position: absolute; bottom: -6px; left: 50%;
-            transform: translateX(-50%); width: 5px; height: 5px;
-            background: var(--main-green); border-radius: 50%;
-        }
+        .nav-btn.active::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; background: var(--main-green); border-radius: 50%; }
     </style>
 </head>
 <body class="pb-20">
@@ -87,13 +46,13 @@
         <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-lg pulse-logo">
             <i class="fas fa-shield-alt text-4xl text-green-500"></i>
         </div>
-        <h1 class="text-2xl font-black text-green-600 tracking-wider mb-2">RS VIP</h1>
-        <p class="text-gray-500 text-sm font-medium"><i class="fas fa-spinner fa-spin mr-2"></i>กำลังตรวจสอบระบบ...</p>
+        <h1 class="text-3xl font-black text-green-600 tracking-wider mb-2">RSP</h1>
+        <p class="text-gray-500 text-sm font-medium"><i class="fas fa-spinner fa-spin mr-2"></i>กำลังเชื่อมต่อระบบ...</p>
     </div>
 
     <div id="auth-section" class="hidden min-h-screen flex flex-col justify-center items-center p-6">
         <div id="login-box" class="glass-panel w-full max-w-md p-8 text-center fade-in">
-            <h2 class="text-3xl font-black text-green-600 mb-2">ยินดีต้อนรับ</h2>
+            <h2 class="text-4xl font-black text-green-600 mb-2">RSP</h2>
             <p class="text-gray-500 text-sm mb-8">เข้าสู่ระบบเพื่อเริ่มทำกำไร</p>
             
             <div class="space-y-4 mb-6">
@@ -141,7 +100,7 @@
 
         <div id="tab-lobby" class="app-tab">
             <div class="flex justify-between items-end mb-4 px-1">
-                <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-fire text-orange-500 mr-2"></i>เกมยอดฮิต</h3>
+                <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-fire text-orange-500 mr-2"></i>เกมของ RSP</h3>
             </div>
             <div class="grid grid-cols-2 gap-4 mb-6">
                 <div onclick="openGame('rps')" class="glass-panel p-5 text-center cursor-pointer hover:border-green-400 transition transform hover:-translate-y-1 group">
@@ -149,35 +108,25 @@
                     <h4 class="font-bold text-gray-800 text-sm">เป่ายิ้งฉุบ</h4>
                     <p class="text-[10px] text-gray-500 mt-1 bg-gray-100 rounded-full py-1">ทายผล 1 ต่อ 1</p>
                 </div>
-                <div onclick="openGame('penalty')" class="glass-panel p-5 text-center cursor-pointer hover:green-400 transition transform hover:-translate-y-1 group">
+                <div onclick="openGame('penalty')" class="glass-panel p-5 text-center cursor-pointer hover:border-green-400 transition transform hover:-translate-y-1 group">
                     <div class="text-5xl mb-3 group-hover:scale-110 transition duration-300">⚽</div>
                     <h4 class="font-bold text-gray-800 text-sm">ยิงจุดโทษ</h4>
                     <p class="text-[10px] text-gray-500 mt-1 bg-gray-100 rounded-full py-1">เลือกมุมทำเงิน</p>
                 </div>
             </div>
-
-            <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-5 text-white shadow-lg shadow-green-500/30 flex items-center justify-between">
-                <div>
-                    <h4 class="font-bold"><i class="fas fa-crown text-yellow-300 mr-2"></i>สิทธิพิเศษ VIP</h4>
-                    <p class="text-xs text-green-100 mt-1 opacity-90">เล่นเกมเพื่อรับโบนัสพิเศษ</p>
-                </div>
-                <button onclick="switchTab('profile')" class="bg-white text-green-600 text-xs font-bold px-4 py-2 rounded-full hover:bg-green-50">ดูโปรไฟล์</button>
-            </div>
         </div>
 
         <div id="tab-wallet" class="app-tab hidden">
             <h3 class="text-lg font-bold text-gray-800 mb-4 px-1"><i class="fas fa-wallet text-blue-500 mr-2"></i>จัดการการเงิน</h3>
-            
             <div class="glass-panel p-5 mb-4 border-l-4 border-l-blue-500">
                 <div class="flex items-center justify-between mb-3">
                     <div><h4 class="font-bold text-gray-800">เติมเครดิต</h4><p class="text-xs text-gray-500">ทำรายการผ่านแอดมิน</p></div>
                     <div class="w-10 h-10 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center"><i class="fas fa-plus"></i></div>
                 </div>
                 <button onclick="contactAdmin()" class="w-full bg-[#06C755] text-white font-bold py-3 rounded-xl hover:bg-[#05b34c] flex items-center justify-center gap-2">
-                    <i class="fab fa-line text-xl"></i> ติดต่อแอดมิน (Line/FB)
+                    <i class="fab fa-line text-xl"></i> ติดต่อแอดมิน
                 </button>
             </div>
-
             <div class="glass-panel p-5 border-l-4 border-l-red-500">
                 <div class="flex items-center justify-between mb-4">
                     <div><h4 class="font-bold text-gray-800">ถอนเงิน</h4><p class="text-xs text-gray-500">ขั้นต่ำ 100 บาท</p></div>
@@ -204,25 +153,15 @@
                 <button onclick="toggleHist('my')" id="btn-hist-my" class="flex-1 py-2 font-bold text-sm rounded-lg bg-white text-green-600 shadow-sm">ประวัติของฉัน</button>
                 <button onclick="toggleHist('top')" id="btn-hist-top" class="flex-1 py-2 font-bold text-sm rounded-lg text-gray-500">จัดอันดับ (Top 10)</button>
             </div>
-
-            <div id="view-my-hist" class="glass-panel p-2 min-h-[50vh] max-h-[60vh] overflow-y-auto">
-                <div id="hist-list" class="space-y-1 p-2"></div>
-            </div>
-
-            <div id="view-top-rank" class="glass-panel p-4 hidden min-h-[50vh]">
-                <div id="rank-list" class="space-y-3"></div>
-            </div>
+            <div id="view-my-hist" class="glass-panel p-2 min-h-[50vh] max-h-[60vh] overflow-y-auto"><div id="hist-list" class="space-y-1 p-2"></div></div>
+            <div id="view-top-rank" class="glass-panel p-4 hidden min-h-[50vh]"><div id="rank-list" class="space-y-3"></div></div>
         </div>
 
         <div id="tab-profile" class="app-tab hidden">
             <div class="glass-panel p-6 text-center mb-4">
-                <div class="relative inline-block mb-3">
-                    <img id="prof-avatar" src="" class="w-24 h-24 rounded-full border-4 border-green-100 shadow-md">
-                    <div class="absolute bottom-1 right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
-                </div>
+                <img id="prof-avatar" src="" class="w-24 h-24 rounded-full border-4 border-green-100 shadow-md mx-auto mb-3">
                 <h3 id="prof-name" class="text-xl font-bold text-gray-800">Loading...</h3>
                 <p id="prof-email" class="text-sm text-gray-500 mb-4">Loading...</p>
-                
                 <div class="flex justify-around border-t border-gray-100 pt-4 mt-2">
                     <div><p class="text-[10px] text-gray-400 font-bold uppercase">เล่นไปแล้ว</p><p id="prof-games" class="text-lg font-black text-blue-500">0</p></div>
                     <div><p class="text-[10px] text-gray-400 font-bold uppercase">สถานะ</p><p class="text-sm font-bold text-green-500 mt-1">ปกติ <i class="fas fa-check-circle"></i></p></div>
@@ -239,17 +178,14 @@
                 <h2 class="text-xl font-black text-gray-800">เป่ายิ้งฉุบ</h2>
                 <div class="w-10"></div>
             </div>
-            
             <div class="bg-gray-50 rounded-2xl p-4 mb-8 border border-gray-200">
                 <label class="text-xs font-bold text-gray-500 uppercase">เงินเดิมพัน (บาท)</label>
                 <input type="number" id="bet-rps" placeholder="0" class="w-full text-center text-4xl bg-transparent font-black outline-none text-green-600 mt-2">
             </div>
-
-            <p class="text-sm text-gray-500 mb-4 font-bold">เลือกอาวุธเพื่อเดิมพัน</p>
             <div class="flex justify-center gap-4">
-                <button onclick="playGame('rps', 'rock')" class="w-20 h-20 text-4xl bg-white border-2 border-gray-200 rounded-2xl hover:border-green-500 hover:bg-green-50 hover:-translate-y-2 transition-all shadow-sm">✊</button>
-                <button onclick="playGame('rps', 'paper')" class="w-20 h-20 text-4xl bg-white border-2 border-gray-200 rounded-2xl hover:border-green-500 hover:bg-green-50 hover:-translate-y-2 transition-all shadow-sm">🖐</button>
-                <button onclick="playGame('rps', 'scissors')" class="w-20 h-20 text-4xl bg-white border-2 border-gray-200 rounded-2xl hover:border-green-500 hover:bg-green-50 hover:-translate-y-2 transition-all shadow-sm">✌</button>
+                <button onclick="playGame('rps', 'rock')" class="w-20 h-20 text-4xl bg-white border-2 border-gray-200 rounded-2xl hover:border-green-500 hover:bg-green-50 transition-all shadow-sm">✊</button>
+                <button onclick="playGame('rps', 'paper')" class="w-20 h-20 text-4xl bg-white border-2 border-gray-200 rounded-2xl hover:border-green-500 hover:bg-green-50 transition-all shadow-sm">🖐</button>
+                <button onclick="playGame('rps', 'scissors')" class="w-20 h-20 text-4xl bg-white border-2 border-gray-200 rounded-2xl hover:border-green-500 hover:bg-green-50 transition-all shadow-sm">✌</button>
             </div>
         </div>
 
@@ -259,113 +195,111 @@
                 <h2 class="text-xl font-black text-gray-800">ยิงจุดโทษ</h2>
                 <div class="w-10"></div>
             </div>
-
             <input type="number" id="bet-pen" placeholder="ใส่เงินเดิมพันที่นี่" class="w-full p-3 text-center text-2xl font-black bg-gray-50 rounded-xl outline-none text-green-600 mb-4 border border-gray-200">
-            
             <div class="football-field h-48 mb-6 flex justify-center items-end pb-4">
                 <div class="goal-net"></div>
-                <div id="gk" class="absolute top-10 text-5xl z-10 transition-all duration-300 drop-shadow-lg">🧤</div>
-                <div id="ball" class="text-3xl z-20 drop-shadow-xl transition-all duration-500 ease-out">⚽</div>
+                <div id="gk" class="absolute top-10 text-5xl z-10 transition-all duration-300">🧤</div>
+                <div id="ball" class="text-3xl z-20 transition-all duration-500 ease-out">⚽</div>
             </div>
-
             <div class="grid grid-cols-3 gap-2">
-                <button onclick="playGame('penalty', 'left')" class="bg-white border-2 border-gray-200 py-3 rounded-xl hover:border-green-500 text-gray-600 font-bold active:bg-green-50"><i class="fas fa-arrow-left mb-1 block"></i>ซ้าย</button>
-                <button onclick="playGame('penalty', 'center')" class="bg-white border-2 border-gray-200 py-3 rounded-xl hover:border-green-500 text-gray-600 font-bold active:bg-green-50"><i class="fas fa-arrow-up mb-1 block"></i>กลาง</button>
-                <button onclick="playGame('penalty', 'right')" class="bg-white border-2 border-gray-200 py-3 rounded-xl hover:border-green-500 text-gray-600 font-bold active:bg-green-50"><i class="fas fa-arrow-right mb-1 block"></i>ขวา</button>
+                <button onclick="playGame('penalty', 'left')" class="bg-white border-2 border-gray-200 py-3 rounded-xl hover:border-green-500 font-bold"><i class="fas fa-arrow-left mb-1 block"></i>ซ้าย</button>
+                <button onclick="playGame('penalty', 'center')" class="bg-white border-2 border-gray-200 py-3 rounded-xl hover:border-green-500 font-bold"><i class="fas fa-arrow-up mb-1 block"></i>กลาง</button>
+                <button onclick="playGame('penalty', 'right')" class="bg-white border-2 border-gray-200 py-3 rounded-xl hover:border-green-500 font-bold"><i class="fas fa-arrow-right mb-1 block"></i>ขวา</button>
             </div>
         </div>
-
     </div>
 
     <div id="bottom-nav" class="hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-around p-2 pb-safe z-50">
-        <button class="nav-btn active flex-1 py-2 flex flex-col items-center gap-1 relative" onclick="switchTab('lobby', this)">
-            <i class="fas fa-gamepad text-xl"></i><span class="text-[10px] font-bold">หน้าแรก</span>
-        </button>
-        <button class="nav-btn flex-1 py-2 flex flex-col items-center gap-1 relative" onclick="switchTab('wallet', this)">
-            <i class="fas fa-wallet text-xl"></i><span class="text-[10px] font-bold">กระเป๋า</span>
-        </button>
-        <button class="nav-btn flex-1 py-2 flex flex-col items-center gap-1 relative" onclick="switchTab('history', this)">
-            <i class="fas fa-history text-xl"></i><span class="text-[10px] font-bold">ประวัติ</span>
-        </button>
-        <button class="nav-btn flex-1 py-2 flex flex-col items-center gap-1 relative" onclick="switchTab('profile', this)">
-            <i class="fas fa-user text-xl"></i><span class="text-[10px] font-bold">ฉัน</span>
-        </button>
+        <button class="nav-btn active flex-1 py-2 flex flex-col items-center gap-1" onclick="switchTab('lobby', this)"><i class="fas fa-gamepad text-xl"></i><span class="text-[10px] font-bold">หน้าแรก</span></button>
+        <button class="nav-btn flex-1 py-2 flex flex-col items-center gap-1" onclick="switchTab('wallet', this)"><i class="fas fa-wallet text-xl"></i><span class="text-[10px] font-bold">กระเป๋า</span></button>
+        <button class="nav-btn flex-1 py-2 flex flex-col items-center gap-1" onclick="switchTab('history', this)"><i class="fas fa-history text-xl"></i><span class="text-[10px] font-bold">ประวัติ</span></button>
+        <button class="nav-btn flex-1 py-2 flex flex-col items-center gap-1" onclick="switchTab('profile', this)"><i class="fas fa-user text-xl"></i><span class="text-[10px] font-bold">ฉัน</span></button>
     </div>
 
     <script>
-        // --- 1. CONFIG FIREBASE ---
+        // CONFIG FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyDaeVJ1mUxjm1gG4GMTfZyqJsjImiISzPI", projectId: "gaga-1eb83" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         
         let currentUserData = null;
-        let lastAnnounceTime = 0; // กันเด้งประกาศซ้ำ
+        let lastAnnounceTime = 0;
+        let snapshotUnsubscribe = null;
         const Toast = Swal.mixin({ toast: true, position: 'top', showConfirmButton: false, timer: 1500 });
 
-        // --- 2. AUTH STATE LISTENER (ป้องกันจอขาว 100%) ---
-        auth.onAuthStateChanged(user => {
+        // ฟังก์ชันบังคับปิดหน้าโหลด ป้องกันอาการค้าง 100%
+        function hideLoader() {
             const loader = document.getElementById('page-loader');
+            if(loader.style.display !== 'none') {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 400);
+            }
+        }
+
+        // ฟังชั่นหลักตรวจสอบการล็อกอิน
+        auth.onAuthStateChanged(user => {
             if (user) {
-                // โหลดข้อมูลแบบ Realtime + Try Catch กันพัง
-                db.collection('users').doc(user.uid).onSnapshot(doc => {
+                // เคลียร์การดึงข้อมูลเก่าถ้ามี
+                if(snapshotUnsubscribe) snapshotUnsubscribe();
+
+                snapshotUnsubscribe = db.collection('users').doc(user.uid).onSnapshot(doc => {
                     try {
                         if (doc.exists) {
                             currentUserData = doc.data();
                             updateUI(currentUserData, user.email);
-                            
-                            // โชว์แอป ซ่อนล็อกอิน
                             document.getElementById('auth-section').classList.add('hidden');
                             document.getElementById('main-app').classList.remove('hidden');
                             document.getElementById('bottom-nav').classList.remove('hidden');
                             document.getElementById('bottom-nav').classList.add('flex');
-                            
-                            // โหลดประวัติ
                             loadHistories(user.uid);
+                            hideLoader(); // โหลดเสร็จสั่งปิดหน้าโหลด
                         } else {
-                            // ถ้าล็อกอินติดแต่ข้อมูล Database หาย ให้เตะออก ป้องกันจอขาว
-                            auth.signOut();
+                            // กรณีสมัครใหม่แต่ Firestore ยังเขียนไม่เสร็จ ให้รอ 2 วินาที
+                            setTimeout(() => {
+                                if(!currentUserData) {
+                                    auth.signOut();
+                                    hideLoader();
+                                }
+                            }, 2000);
                         }
-                        // ปิด Loader
-                        loader.style.opacity = '0';
-                        setTimeout(() => loader.style.display = 'none', 400);
                     } catch (error) {
                         console.error("Data Error:", error);
-                        Swal.fire('ข้อผิดพลาด', 'ไม่สามารถโหลดข้อมูลบัญชีได้', 'error');
-                        loader.style.display = 'none';
+                        hideLoader(); // โชว์หน้าเว็บปกติแม้จะมี Error
                     }
+                }, error => {
+                    // กรณี Rules บล็อค หรือดึงข้อมูลไม่ได้ ให้เตะออกและปิดหน้าโหลด
+                    console.error("Firestore Error:", error);
+                    auth.signOut();
+                    hideLoader();
+                    Swal.fire('ข้อผิดพลาด', 'ดึงข้อมูลไม่สำเร็จ กรุณาล็อกอินใหม่', 'error');
                 });
 
-                // 🔔 ระบบฟังประกาศจาก Admin (เด้ง Popup ทันทีที่แอดมินส่ง)
+                // ฟังประกาศแอดมิน
                 db.collection('settings').doc('system').onSnapshot(doc => {
                     if (doc.exists) {
                         const data = doc.data();
                         if (data.timestamp && data.timestamp > lastAnnounceTime) {
-                            if (lastAnnounceTime !== 0) { // ไม่เด้งตอนเพิ่งเปิดเว็บ
-                                Swal.fire({
-                                    title: '📢 ประกาศจากแอดมิน', text: data.announcement,
-                                    icon: 'info', confirmButtonColor: '#22c55e', backdrop: `rgba(0,0,0,0.6)`
-                                });
-                            }
+                            if (lastAnnounceTime !== 0) Swal.fire({ title: '📢 ประกาศจาก RSP', text: data.announcement, icon: 'info', confirmButtonColor: '#22c55e' });
                             lastAnnounceTime = data.timestamp;
                         }
                     }
                 });
 
+                // บังคับปิดหน้าโหลดเผื่อเน็ตหลุดกลางคัน (Timeout 5 วิ)
+                setTimeout(hideLoader, 5000);
+
             } else {
-                // กรณียังไม่ล็อกอิน หรือกดออกจากระบบ
+                currentUserData = null;
                 document.getElementById('auth-section').classList.remove('hidden');
                 document.getElementById('main-app').classList.add('hidden');
                 document.getElementById('bottom-nav').classList.add('hidden');
                 document.getElementById('bottom-nav').classList.remove('flex');
-                
-                // ปิด Loader
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 400);
+                hideLoader(); // ถ้ายังไม่ล็อกอิน ให้ปิดหน้าโหลดทันที
             }
         });
 
-        // --- 3. UI FUNCTIONS ---
+        // ----------------- UI / Game Logic -----------------
         function toggleAuth(type) {
             document.getElementById('login-box').classList.toggle('hidden', type !== 'login');
             document.getElementById('register-box').classList.toggle('hidden', type !== 'register');
@@ -374,7 +308,6 @@
         function switchTab(tabId, btn = null) {
             document.querySelectorAll('.app-tab').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
-            
             if(btn) {
                 document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
                 btn.classList.add('active');
@@ -390,10 +323,8 @@
             const isMy = type === 'my';
             document.getElementById('view-my-hist').classList.toggle('hidden', !isMy);
             document.getElementById('view-top-rank').classList.toggle('hidden', isMy);
-            
             document.getElementById('btn-hist-my').className = isMy ? 'flex-1 py-2 font-bold text-sm rounded-lg bg-white text-green-600 shadow-sm' : 'flex-1 py-2 font-bold text-sm rounded-lg text-gray-500';
             document.getElementById('btn-hist-top').className = !isMy ? 'flex-1 py-2 font-bold text-sm rounded-lg bg-white text-green-600 shadow-sm' : 'flex-1 py-2 font-bold text-sm rounded-lg text-gray-500';
-            
             if(!isMy) loadLeaderboard();
         }
 
@@ -401,45 +332,37 @@
             const name = data.name || 'ผู้เล่นนิรนาม';
             const bal = (data.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
             const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=dcfce3&color=22c55e&bold=true`;
-            
             document.getElementById('disp-name').innerText = name;
             document.getElementById('disp-bal').innerText = bal;
             document.getElementById('user-avatar').src = avatar;
-            
             document.getElementById('prof-name').innerText = name;
             document.getElementById('prof-email').innerText = email;
             document.getElementById('prof-avatar').src = avatar + '&size=128';
         }
 
-        // --- 4. AUTHENTICATION LOGIC ---
         async function registerUser() {
             const n = document.getElementById('reg-name').value.trim();
             const e = document.getElementById('reg-email').value.trim();
             const p = document.getElementById('reg-pw').value;
-            
             if(!n || !e || !p) return Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกให้ครบทุกช่อง', 'warning');
             if(p.length < 6) return Swal.fire('ผิดพลาด', 'รหัสผ่านต้องมี 6 ตัวอักษรขึ้นไป', 'warning');
             
             Swal.showLoading();
             try {
                 const cred = await auth.createUserWithEmailAndPassword(e, p);
-                // สร้างข้อมูลเริ่มต้น (ตั้ง default เป็น user)
                 await db.collection('users').doc(cred.user.uid).set({
                     name: n, email: e, balance: 0, role: 'user', winRate: 35, 
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 Swal.close();
                 Toast.fire({icon: 'success', title: 'สมัครสำเร็จ!'});
-            } catch(err) {
-                Swal.fire('ผิดพลาด', err.message, 'error');
-            }
+            } catch(err) { Swal.fire('ผิดพลาด', err.message, 'error'); }
         }
 
         function loginUser() {
             const e = document.getElementById('log-email').value.trim();
             const p = document.getElementById('log-pw').value;
             if(!e || !p) return Toast.fire({icon: 'warning', title: 'ใส่ข้อมูลให้ครบ'});
-            
             Swal.showLoading();
             auth.signInWithEmailAndPassword(e, p)
                 .then(() => Swal.close())
@@ -453,13 +376,11 @@
             }).then((res) => { if (res.isConfirmed) auth.signOut(); });
         }
 
-        // --- 5. WALLET & ADMIN CONTACT ---
         function contactAdmin() {
-            // ดึงลิงก์แอดมินจาก Database แบบเรียลไทม์
             db.collection('settings').doc('system').get().then(doc => {
                 const link = doc.exists ? doc.data().contact_link : null;
                 if(link) window.open(link, '_blank');
-                else Swal.fire('ติดต่อแอดมิน', 'Line ID: @admin_rsvip', 'info');
+                else Swal.fire('ติดต่อแอดมิน', 'Line ID: @admin_rsp', 'info');
             });
         }
 
@@ -467,7 +388,6 @@
             const amt = Number(document.getElementById('wd-amt').value);
             const bank = document.getElementById('wd-bank').value;
             const acc = document.getElementById('wd-acc').value.trim();
-            
             if(amt < 100) return Swal.fire('ยอดไม่ถึง', 'ถอนขั้นต่ำ 100 บาท', 'warning');
             if(!bank || !acc) return Swal.fire('ข้อมูลไม่ครบ', 'เลือกธนาคารและใส่เลขบัญชี', 'warning');
             if(amt > currentUserData.balance) return Swal.fire('เงินไม่พอ', 'ยอดเงินของคุณไม่พอถอน', 'error');
@@ -476,8 +396,6 @@
             try {
                 const uid = auth.currentUser.uid;
                 const batch = db.batch();
-                
-                // หักเงิน + สร้างคิวถอน
                 batch.update(db.collection('users').doc(uid), { balance: currentUserData.balance - amt });
                 batch.set(db.collection('transactions').doc(), {
                     uid: uid, name: currentUserData.name, amount: amt, type: 'withdraw',
@@ -485,22 +403,16 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     dateStr: new Date().toLocaleString('th-TH')
                 });
-                
                 await batch.commit();
                 Swal.fire('สำเร็จ', 'ส่งคำขอถอนเงินแล้ว กรุณารอแอดมินโอน', 'success');
-                
-                document.getElementById('wd-amt').value = '';
-                document.getElementById('wd-acc').value = '';
-            } catch(e) {
-                Swal.fire('ผิดพลาด', 'ระบบมีปัญหา กรุณาลองใหม่', 'error');
-            }
+                document.getElementById('wd-amt').value = ''; document.getElementById('wd-acc').value = '';
+            } catch(e) { Swal.fire('ผิดพลาด', 'ระบบมีปัญหา กรุณาลองใหม่', 'error'); }
         }
 
-        // --- 6. GAME ENGINE (CORE LOGIC) ---
+        // GAME ENGINE
         async function processGame(gameName, bet, isWin) {
             const change = isWin ? bet : -bet;
             const uid = auth.currentUser.uid;
-            
             const batch = db.batch();
             batch.update(db.collection('users').doc(uid), { balance: currentUserData.balance + change });
             batch.set(db.collection('history').doc(), {
@@ -516,11 +428,9 @@
         function playGame(type, choice) {
             const betInput = document.getElementById(type === 'rps' ? 'bet-rps' : 'bet-pen');
             const bet = Number(betInput.value);
-            
             if(bet <= 0) return Toast.fire({icon: 'warning', title: 'ระบุเงินเดิมพัน'});
             if(bet > currentUserData.balance) return Swal.fire('แจ้งเตือน', 'ยอดเงินไม่พอเดิมพัน!', 'error');
             
-            // คำนวณผลแพ้ชนะจาก Win Rate (แอดมินปรับได้ในอนาคต)
             const winRate = currentUserData.winRate !== undefined ? currentUserData.winRate : 35;
             const isWin = (Math.random() * 100) <= winRate;
 
@@ -528,53 +438,32 @@
             if (type === 'penalty') executePenalty(choice, bet, isWin);
         }
 
-        // ลอจิกเป่ายิ้งฉุบ
         const rpsIcons = { rock: '✊', paper: '🖐', scissors: '✌' };
         const winLogic = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
         const loseLogic = { rock: 'paper', paper: 'scissors', scissors: 'rock' };
 
         async function executeRPS(userChoice, bet, isWin) {
             const botChoice = isWin ? winLogic[userChoice] : loseLogic[userChoice];
-            
             Swal.fire({ title: 'กำลังออกผล...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-            
             try {
                 const change = await processGame('เป่ายิ้งฉุบ', bet, isWin);
                 const resultColor = isWin ? 'text-green-500' : 'text-red-500';
-                
                 Swal.fire({
                     title: isWin ? '🎉 ชนะรับเงิน!' : '💥 เสียใจด้วยคุณแพ้',
-                    html: `
-                        <div class="flex justify-center items-center gap-6 my-4">
-                            <div class="text-center"><div class="text-5xl mb-1">${rpsIcons[userChoice]}</div><p class="text-xs text-gray-400">คุณ</p></div>
-                            <div class="text-2xl font-black text-gray-300">VS</div>
-                            <div class="text-center"><div class="text-5xl mb-1">${rpsIcons[botChoice]}</div><p class="text-xs text-red-400">บอท</p></div>
-                        </div>
-                        <h2 class="text-3xl font-black ${resultColor}">${isWin?'+':''}${change} ฿</h2>
-                    `,
+                    html: `<div class="flex justify-center items-center gap-6 my-4"><div class="text-center"><div class="text-5xl mb-1">${rpsIcons[userChoice]}</div><p class="text-xs text-gray-400">คุณ</p></div><div class="text-2xl font-black text-gray-300">VS</div><div class="text-center"><div class="text-5xl mb-1">${rpsIcons[botChoice]}</div><p class="text-xs text-red-400">บอท</p></div></div><h2 class="text-3xl font-black ${resultColor}">${isWin?'+':''}${change} ฿</h2>`,
                     confirmButtonColor: '#22c55e', confirmButtonText: 'เล่นต่อ'
                 });
             } catch(e) { Swal.fire('Error', 'เกิดข้อผิดพลาด', 'error'); }
         }
 
-        // ลอจิกยิงจุดโทษ
         async function executePenalty(dir, bet, isWin) {
-            const ball = document.getElementById('ball');
-            const gk = document.getElementById('gk');
+            const ball = document.getElementById('ball'); const gk = document.getElementById('gk');
+            ball.style.transform = 'translateY(0) scale(1)'; gk.style.transform = 'translate(0, 0)';
             
-            // รีเซ็ตตำแหน่ง
-            ball.style.transform = 'translateY(0) scale(1)';
-            gk.style.transform = 'translate(0, 0)';
-            
-            // คำนวณทิศทางโกล
             const dirs = ['left', 'center', 'right'];
             let gkDir = dir;
-            if(isWin) {
-                dirs.splice(dirs.indexOf(dir), 1);
-                gkDir = dirs[Math.floor(Math.random() * dirs.length)];
-            }
+            if(isWin) { dirs.splice(dirs.indexOf(dir), 1); gkDir = dirs[Math.floor(Math.random() * dirs.length)]; }
 
-            // แอนิเมชันลูกบอลและผู้รักษาประตู
             setTimeout(() => {
                 if(gkDir === 'left') gk.style.transform = 'translate(-50px, -20px) rotate(-45deg)';
                 else if(gkDir === 'right') gk.style.transform = 'translate(50px, -20px) rotate(45deg)';
@@ -588,42 +477,22 @@
             setTimeout(async () => {
                 try {
                     const change = await processGame('ยิงจุดโทษ', bet, isWin);
-                    Swal.fire({
-                        title: isWin ? '⚽ GOAL!!!' : '🧤 SAVED!!!',
-                        text: isWin ? `สวยงาม! รับเงิน +${change} ฿` : `ไม่เข้า! เสียเงิน ${change} ฿`,
-                        icon: isWin ? 'success' : 'error',
-                        confirmButtonColor: '#22c55e'
-                    }).then(() => {
-                        ball.style.transform = 'translateY(0) scale(1)';
-                        gk.style.transform = 'translate(0, 0)';
-                    });
+                    Swal.fire({ title: isWin ? '⚽ GOAL!!!' : '🧤 SAVED!!!', text: isWin ? `รับเงิน +${change} ฿` : `เสียเงิน ${change} ฿`, icon: isWin ? 'success' : 'error', confirmButtonColor: '#22c55e' })
+                        .then(() => { ball.style.transform = 'translateY(0) scale(1)'; gk.style.transform = 'translate(0, 0)'; });
                 } catch(e) { Swal.fire('Error', 'ประมวลผลพลาด', 'error'); }
             }, 800);
         }
 
-        // --- 7. DATA LOADERS (ประวัติ / จัดอันดับ) ---
         function loadHistories(uid) {
             db.collection('history').where('uid', '==', uid).orderBy('timestamp', 'desc').limit(20)
                 .onSnapshot(snap => {
-                    document.getElementById('prof-games').innerText = snap.size; // อัปเดตยอดเล่นหน้าโปรไฟล์
-                    
+                    document.getElementById('prof-games').innerText = snap.size;
                     let html = '';
                     if(snap.empty) html = '<div class="text-center py-6 text-gray-400 text-sm">ยังไม่มีประวัติการเล่น</div>';
                     else {
                         snap.forEach(doc => {
-                            const h = doc.data();
-                            const win = h.result === 'win';
-                            html += `
-                            <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg ${win?'bg-green-100 text-green-500':'bg-red-100 text-red-500'} flex justify-center items-center text-lg"><i class="fas ${win?'fa-arrow-up':'fa-arrow-down'}"></i></div>
-                                    <div><p class="font-bold text-gray-800 text-sm">${h.game}</p><p class="text-[10px] text-gray-400">${h.dateStr}</p></div>
-                                </div>
-                                <div class="text-right">
-                                    <p class="${win?'text-green-500':'text-red-500'} font-black text-sm">${win?'+':''}${h.amountChange}</p>
-                                    <p class="text-[10px] text-gray-400">เดิมพัน: ${h.bet}</p>
-                                </div>
-                            </div>`;
+                            const h = doc.data(); const win = h.result === 'win';
+                            html += `<div class="flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg ${win?'bg-green-100 text-green-500':'bg-red-100 text-red-500'} flex justify-center items-center text-lg"><i class="fas ${win?'fa-arrow-up':'fa-arrow-down'}"></i></div><div><p class="font-bold text-gray-800 text-sm">${h.game}</p><p class="text-[10px] text-gray-400">${h.dateStr}</p></div></div><div class="text-right"><p class="${win?'text-green-500':'text-red-500'} font-black text-sm">${win?'+':''}${h.amountChange}</p><p class="text-[10px] text-gray-400">เดิมพัน: ${h.bet}</p></div></div>`;
                         });
                     }
                     document.getElementById('hist-list').innerHTML = html;
@@ -637,15 +506,7 @@
                 snap.forEach(doc => {
                     const u = doc.data();
                     let medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `<span class="text-gray-400 font-bold text-sm">${rank}</span>`;
-                    html += `
-                    <div class="flex justify-between items-center p-3 bg-white border border-gray-100 rounded-xl">
-                        <div class="flex items-center gap-3">
-                            <div class="w-6 text-center text-xl">${medal}</div>
-                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(u.name||'A')}&background=random" class="w-8 h-8 rounded-full">
-                            <p class="font-bold text-gray-700 text-sm">${u.name || 'Anonymous'}</p>
-                        </div>
-                        <p class="text-green-600 font-black text-sm">฿ ${(u.balance||0).toLocaleString()}</p>
-                    </div>`;
+                    html += `<div class="flex justify-between items-center p-3 bg-white border border-gray-100 rounded-xl"><div class="flex items-center gap-3"><div class="w-6 text-center text-xl">${medal}</div><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(u.name||'A')}&background=random" class="w-8 h-8 rounded-full"><p class="font-bold text-gray-700 text-sm">${u.name || 'Anonymous'}</p></div><p class="text-green-600 font-black text-sm">฿ ${(u.balance||0).toLocaleString()}</p></div>`;
                     rank++;
                 });
                 document.getElementById('rank-list').innerHTML = html;
