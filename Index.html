@@ -3,109 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RSP LUXURY | ระบบผู้เล่น</title>
+    <title>RSP |</title>
+    
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        body { font-family: 'Kanit', sans-serif; background: #020617; color: white; -webkit-tap-highlight-color: transparent; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
-        .gold-text { background: linear-gradient(to bottom, #fde68a, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body { font-family: 'Kanit', sans-serif; background: #070b19; color: #ffffff; -webkit-tap-highlight-color: transparent; }
+        .bg-gradient { background: radial-gradient(circle at 50% 0%, #1e293b 0%, #070b19 70%); }
+        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-btn { background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.2)); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .gold-text { background: linear-gradient(to right, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-active { color: #f59e0b; transform: scale(1.1); filter: drop-shadow(0 0 8px #f59e0b); }
-        input, select { background: rgba(0,0,0,0.5) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
+        .tab-content.active { display: block; animation: fadeZoom 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeZoom { 0% { opacity: 0; transform: translateY(15px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        .nav-active { color: #fbbf24; transform: translateY(-5px); filter: drop-shadow(0px 0px 8px rgba(251, 191, 36, 0.5)); }
+        input, select { background: rgba(0,0,0,0.3) !important; color: white !important; border: 1px solid rgba(255,255,255,0.1) !important; }
+        input:focus, select:focus { border-color: #fbbf24 !important; }
+        .spin-anim { animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="pb-28">
+<body class="bg-gradient min-h-screen pb-28">
+
     <audio id="snd-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="snd-win" src="https://www.myinstants.com/media/sounds/win-sound-effect-8.mp3"></audio>
     <audio id="snd-lose" src="https://www.myinstants.com/media/sounds/fail-sound-effect.mp3"></audio>
 
-    <div id="loader" class="fixed inset-0 z-[999] bg-[#020617] flex flex-col items-center justify-center">
-        <div class="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <h2 class="gold-text text-xl font-black">RSP SYSTEM</h2>
+    <div id="loader" class="fixed inset-0 z-[999] bg-[#070b19] flex flex-col items-center justify-center">
+        <div class="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full spin-anim mb-4 shadow-[0_0_15px_#fbbf24]"></div>
+        <h2 class="text-xl font-black tracking-widest gold-text">LOADING...</h2>
     </div>
 
     <div id="auth-screen" class="hidden min-h-screen flex items-center justify-center p-6">
-        <div class="glass w-full max-w-sm p-10 rounded-[3rem] text-center shadow-2xl">
-            <h1 class="gold-text text-5xl font-black mb-10 italic">RSP<span class="text-white">.</span></h1>
-            <input type="email" id="email" placeholder="อีเมล" class="w-full p-4 mb-4 rounded-2xl outline-none">
-            <input type="password" id="pass" placeholder="รหัสผ่าน" class="w-full p-4 mb-6 rounded-2xl outline-none">
-            <button onclick="handleAuth('login')" class="w-full bg-amber-500 text-black font-black py-4 rounded-2xl shadow-lg active:scale-95 mb-4">เข้าสู่ระบบ</button>
-            <button onclick="handleAuth('reg')" class="text-slate-400 text-sm">ยังไม่มีบัญชี? <span class="text-amber-500">สมัครที่นี่</span></button>
+        <div class="glass w-full max-w-sm p-8 rounded-[2rem] text-center shadow-2xl relative overflow-hidden">
+            <div class="absolute top-[-50px] left-[-50px] w-32 h-32 bg-amber-500/20 blur-3xl rounded-full"></div>
+            <h1 class="text-5xl font-black mb-2 italic">RSP<span class="text-amber-500">.</span></h1>
+            <p class="text-slate-400 text-sm mb-8">EXCLUSIVE ARCADE</p>
+            
+            <div class="space-y-4 relative z-10">
+                <input type="email" id="email" placeholder="อีเมลของคุณ" class="w-full p-4 rounded-2xl outline-none transition">
+                <input type="password" id="pass" placeholder="รหัสผ่าน" class="w-full p-4 rounded-2xl outline-none transition">
+                <button onclick="handleAuth('login')" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-black font-black py-4 rounded-2xl shadow-[0_0_15px_rgba(245,158,11,0.4)] active:scale-95 transition mt-2">เข้าสู่ระบบ</button>
+                <button onclick="handleAuth('reg')" class="text-slate-400 text-sm mt-4 w-full">ผู้เล่นใหม่? <span class="text-amber-500 font-bold underline">สมัครสมาชิกคลิก</span></button>
+            </div>
         </div>
     </div>
 
-    <div id="app-screen" class="hidden max-w-md mx-auto p-4 pt-10">
-        <div class="glass p-6 rounded-[2.5rem] mb-6 flex justify-between items-center border-b-2 border-amber-500/50">
-            <div><p class="text-[10px] text-slate-500 uppercase font-bold">Player</p><h2 id="u-name" class="text-xl font-bold">---</h2></div>
-            <div class="text-right"><p class="text-[10px] text-amber-500 font-bold uppercase">เครดิตคงเหลือ</p><p class="text-3xl font-black gold-text leading-none"><span id="u-bal">0</span></p></div>
+    <div id="app-screen" class="hidden max-w-md mx-auto p-4 pt-8">
+        
+        <div class="glass p-6 rounded-[2rem] mb-6 flex justify-between items-center border-b-2 border-amber-500/30">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-amber-500 text-xl shadow-inner border border-white/5"><i class="fas fa-user-astronaut"></i></div>
+                <div>
+                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">ยินดีต้อนรับ</p>
+                    <h2 id="u-name" class="text-lg font-bold w-24 truncate">---</h2>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] text-amber-500 uppercase font-bold tracking-widest">เครดิต</p>
+                <p class="text-3xl font-black gold-text leading-none drop-shadow-md">฿ <span id="u-bal">0</span></p>
+            </div>
         </div>
 
         <div id="tab-home" class="tab-content active">
-            <div class="glass p-8 rounded-[2.5rem] text-center mb-6">
-                <input type="number" id="bet" value="20" class="w-full bg-transparent text-center text-5xl font-black text-white outline-none mb-10">
+            <div class="glass p-8 rounded-[2.5rem] text-center mb-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 blur-3xl rounded-full"></div>
+                <h3 class="text-sm text-slate-400 font-bold uppercase mb-4 tracking-widest">จำนวนเดิมพัน (บาท)</h3>
+                <input type="number" id="bet" value="20" class="w-full bg-transparent text-center text-6xl font-black text-white outline-none mb-10 border-none p-0 focus:border-none focus:ring-0">
+                
                 <div class="grid grid-cols-3 gap-4">
-                    <button onclick="play('rock')" class="glass aspect-square rounded-3xl text-4xl hover:bg-amber-500/20 active:scale-90 transition">✊</button>
-                    <button onclick="play('paper')" class="glass aspect-square rounded-3xl text-4xl hover:bg-amber-500/20 active:scale-90 transition">🖐</button>
-                    <button onclick="play('scissors')" class="glass aspect-square rounded-3xl text-4xl hover:bg-amber-500/20 active:scale-90 transition">✌️</button>
+                    <button onclick="play('rock')" class="glass-btn aspect-square rounded-[2rem] text-5xl flex items-center justify-center hover:bg-white/5 active:scale-90 transition border border-white/10">✊</button>
+                    <button onclick="play('paper')" class="glass-btn aspect-square rounded-[2rem] text-5xl flex items-center justify-center hover:bg-white/5 active:scale-90 transition border border-white/10">🖐</button>
+                    <button onclick="play('scissors')" class="glass-btn aspect-square rounded-[2rem] text-5xl flex items-center justify-center hover:bg-white/5 active:scale-90 transition border border-white/10">✌️</button>
                 </div>
             </div>
         </div>
 
         <div id="tab-wallet" class="tab-content">
-            <div class="glass p-6 rounded-[2.5rem] mb-6">
-                <h3 class="gold-text font-black mb-4">ถอนเงิน</h3>
-                <div class="space-y-3">
-                    <select id="w-bank" class="w-full p-4 rounded-2xl outline-none"><option value="">เลือกธนาคาร</option><option value="กสิกรไทย">กสิกรไทย</option><option value="ไทยพาณิชย์">ไทยพาณิชย์</option><option value="วอเลท">TrueMoney Wallet</option></select>
-                    <input type="text" id="w-name" placeholder="ชื่อบัญชี" class="w-full p-4 rounded-2xl outline-none">
-                    <input type="tel" id="w-acc" placeholder="เลขบัญชี" class="w-full p-4 rounded-2xl outline-none">
-                    <input type="number" id="w-amt" placeholder="จำนวนเงิน" class="w-full p-4 rounded-2xl outline-none font-bold text-amber-500">
-                    <button onclick="handleWithdraw()" class="w-full bg-red-600 font-black py-4 rounded-2xl active:scale-95">แจ้งถอนเงิน</button>
+            <div class="glass p-6 rounded-[2rem] mb-6 border-t-2 border-red-500/50 relative overflow-hidden">
+                <h3 class="text-xl font-black mb-4 flex items-center"><i class="fas fa-money-bill-transfer text-red-500 mr-2"></i> แจ้งถอนเงิน</h3>
+                <div class="space-y-4 relative z-10">
+                    <select id="w-bank" class="w-full p-4 rounded-2xl outline-none">
+                        <option value="">-- เลือกธนาคาร/ช่องทาง --</option>
+                        <option value="กสิกรไทย (KBank)">กสิกรไทย (KBank)</option>
+                        <option value="ไทยพาณิชย์ (SCB)">ไทยพาณิชย์ (SCB)</option>
+                        <option value="กรุงไทย (KTB)">กรุงไทย (KTB)</option>
+                        <option value="กรุงเทพ (BBL)">กรุงเทพ (BBL)</option>
+                        <option value="กรุงศรี (Krungsri)">กรุงศรี (BAY)</option>
+                        <option value="ทีทีบี (TTB)">ทีทีบี (TTB)</option>
+                        <option value="ออมสิน (GSB)">ออมสิน (GSB)</option>
+                        <option value="ธ.ก.ส. (BAAC)">ธ.ก.ส. (BAAC)</option>
+                        <option value="TrueMoney Wallet">TrueMoney Wallet</option>
+                        <option value="PromptPay (พร้อมเพย์)">PromptPay (พร้อมเพย์)</option>
+                    </select>
+                    <input type="text" id="w-name" placeholder="ชื่อ - นามสกุล" class="w-full p-4 rounded-2xl outline-none">
+                    <input type="tel" id="w-acc" placeholder="เลขบัญชี / เบอร์โทร" class="w-full p-4 rounded-2xl outline-none">
+                    <input type="number" id="w-amt" placeholder="จำนวนเงิน (ขั้นต่ำ 100)" class="w-full p-4 rounded-2xl outline-none font-bold text-amber-500 text-lg">
+                    <button onclick="handleWithdraw()" class="w-full bg-gradient-to-r from-red-600 to-red-500 text-white font-black py-4 rounded-2xl active:scale-95 transition shadow-[0_0_15px_rgba(220,38,38,0.4)] mt-2">ยืนยันการถอนเงิน</button>
                 </div>
             </div>
-            <div id="hist-list" class="space-y-2 px-2"></div>
+
+            <div class="px-2">
+                <div class="flex justify-between items-end mb-4">
+                    <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest">ประวัติการถอน</h4>
+                    <button onclick="forceRefreshHistory()" class="text-amber-500 text-xs font-bold bg-amber-500/10 px-3 py-1.5 rounded-full hover:bg-amber-500/20 transition flex items-center gap-1">
+                        <i id="refresh-icon" class="fas fa-sync-alt"></i> รีเฟรช
+                    </button>
+                </div>
+                <div id="hist-list" class="space-y-3">
+                    </div>
+            </div>
         </div>
 
         <div id="tab-help" class="tab-content">
-            <div class="glass p-10 rounded-[2.5rem] text-center">
-                <i class="fab fa-facebook-messenger text-6xl text-blue-500 mb-6"></i>
-                <h2 class="text-2xl font-bold mb-2">ติดต่อฝ่ายบริการ</h2>
-                <p class="text-slate-400 text-sm mb-10">สอบถาม แจ้งปัญหา หรือแจ้งฝากเงิน</p>
-                <button onclick="contactAdmin()" class="w-full bg-blue-600 font-black py-4 rounded-2xl active:scale-95">ทักแชท Facebook</button>
+            <div class="glass p-10 rounded-[2.5rem] text-center border-t-2 border-blue-500/50">
+                <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(59,130,246,0.5)]">
+                    <i class="fab fa-facebook-messenger text-5xl text-white"></i>
+                </div>
+                <h2 class="text-3xl font-black mb-2">ศูนย์ช่วยเหลือ</h2>
+                <p class="text-slate-400 text-sm mb-10">ต้องการเติมเงิน หรือพบปัญหาขัดข้อง?<br>แอดมินพร้อมดูแล 24 ชั่วโมง</p>
+                <button onclick="contactAdmin()" class="w-full glass-btn border border-blue-500/30 text-blue-400 hover:bg-blue-600 hover:text-white font-black py-4 rounded-2xl active:scale-95 transition flex items-center justify-center gap-2">
+                    <i class="fab fa-facebook text-xl"></i> ทักแชทหาแอดมิน
+                </button>
             </div>
         </div>
+
     </div>
 
-    <nav id="nav-bar" class="hidden fixed bottom-6 left-6 right-6 h-20 glass rounded-[2rem] flex items-center justify-around z-50">
-        <button onclick="switchTab('home')" class="nav-btn p-4 nav-active" id="btn-home"><i class="fas fa-gamepad text-2xl"></i></button>
-        <button onclick="switchTab('wallet')" class="nav-btn p-4 text-slate-500" id="btn-wallet"><i class="fas fa-wallet text-2xl"></i></button>
-        <button onclick="switchTab('help')" class="nav-btn p-4 text-slate-500" id="btn-help"><i class="fas fa-comment-dots text-2xl"></i></button>
-        <button onclick="auth.signOut()" class="p-4 text-red-900"><i class="fas fa-power-off text-2xl"></i></button>
+    <nav id="nav-bar" class="hidden fixed bottom-6 left-6 right-6 h-20 glass rounded-[2rem] flex items-center justify-around px-2 shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-50">
+        <button onclick="switchTab('home')" class="nav-btn p-4 text-slate-500 transition-all duration-300 nav-active" id="btn-home"><i class="fas fa-gamepad text-2xl"></i></button>
+        <button onclick="switchTab('wallet')" class="nav-btn p-4 text-slate-500 transition-all duration-300" id="btn-wallet"><i class="fas fa-wallet text-2xl"></i></button>
+        <button onclick="switchTab('help')" class="nav-btn p-4 text-slate-500 transition-all duration-300" id="btn-help"><i class="fas fa-headset text-2xl"></i></button>
+        <button onclick="auth.signOut()" class="p-4 text-red-500/80 hover:text-red-500 transition-all duration-300"><i class="fas fa-power-off text-2xl"></i></button>
     </nav>
 
     <script>
+        // 1. ตั้งค่า Firebase
         const firebaseConfig = { apiKey: "AIzaSyDaeVJ1mUxjm1gG4GMTfZyqJsjImiISzPI", projectId: "gaga-1eb83" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.firestore();
         let userData = null;
+        const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
 
+        // เล่นเสียง
+        function playSfx(id) {
+            const s = document.getElementById(id);
+            if(s) { s.currentTime = 0; s.play().catch(()=>{}); }
+        }
+
+        // 2. ตรวจสอบการล็อกอิน
         auth.onAuthStateChanged(user => {
             if (user) {
                 db.collection('users').doc(user.uid).onSnapshot(doc => {
-                    userData = doc.data();
-                    document.getElementById('u-name').innerText = userData.name;
-                    document.getElementById('u-bal').innerText = userData.balance.toLocaleString();
-                    document.getElementById('auth-screen').classList.add('hidden');
-                    document.getElementById('app-screen').classList.remove('hidden');
-                    document.getElementById('nav-bar').classList.remove('hidden');
-                    document.getElementById('loader').style.display = 'none';
+                    if (doc.exists) {
+                        userData = doc.data();
+                        document.getElementById('u-name').innerText = userData.name;
+                        document.getElementById('u-bal').innerText = userData.balance.toLocaleString();
+                        
+                        document.getElementById('auth-screen').classList.add('hidden');
+                        document.getElementById('app-screen').classList.remove('hidden');
+                        document.getElementById('nav-bar').classList.remove('hidden');
+                        document.getElementById('loader').style.display = 'none';
+                    }
                 });
             } else {
                 document.getElementById('auth-screen').classList.remove('hidden');
@@ -115,86 +180,169 @@
             }
         });
 
+        // 3. ระบบเกมเป่ายิ้งฉุบ
         async function play(choice) {
+            playSfx('snd-click');
             const bet = Number(document.getElementById('bet').value);
-            if (bet < 10 || bet > userData.balance) return Swal.fire('เงินไม่พอหรือเดิมพันต่ำไป', '', 'error');
-            
-            document.getElementById('snd-click').play();
-            Swal.fire({ title: 'กำลังออกผล...', html: '<div class="text-6xl animate-bounce">✊</div>', showConfirmButton: false, timer: 1000 });
+            if (bet < 10) return Swal.fire('ขั้นต่ำ 10 บาท', '', 'warning');
+            if (bet > userData.balance) return Swal.fire('เครดิตไม่เพียงพอ', 'โปรดเติมเงิน', 'error');
+
+            // อนิเมชั่นลุ้นผล
+            Swal.fire({
+                title: 'เป่ายิ้งฉุบ!',
+                html: '<div class="text-7xl animate-bounce my-6 drop-shadow-2xl">✊</div>',
+                showConfirmButton: false, background: '#0f172a', color: '#fff', timer: 1200
+            });
 
             setTimeout(async () => {
-                const win = (Math.random() * 100) < (userData.winRate || 35);
+                const winRate = userData.winRate || 35;
+                const win = (Math.random() * 100) < winRate;
                 const bot = win ? {rock:'scissors', paper:'rock', scissors:'paper'}[choice] : {rock:'paper', paper:'scissors', scissors:'rock'}[choice];
-                const change = win ? bet : -bet;
+                const diff = win ? bet : -bet;
 
-                await db.collection('users').doc(auth.currentUser.uid).update({ balance: firebase.firestore.FieldValue.increment(change) });
-                if(win) document.getElementById('snd-win').play(); else document.getElementById('snd-lose').play();
+                // อัปเดตเงิน
+                await db.collection('users').doc(auth.currentUser.uid).update({ balance: firebase.firestore.FieldValue.increment(diff) });
+                
+                if(win) playSfx('snd-win'); else playSfx('snd-lose');
 
-                Swal.fire({ 
-                    title: win ? 'คุณชนะ!' : 'คุณแพ้!',
-                    html: `<div class="text-4xl mb-4">${{rock:'✊',paper:'🖐',scissors:'✌️'}[choice]} VS ${{rock:'✊',paper:'🖐',scissors:'✌️'}[bot]}</div><h2 class="text-3xl font-black ${win?'text-green-500':'text-red-500'}">${win?'+':''}${change}</h2>`,
-                    icon: win ? 'success' : 'error'
+                // แสดงผล
+                Swal.fire({
+                    title: win ? 'YOU WIN!' : 'YOU LOSE!',
+                    html: `
+                        <div class="flex justify-around items-center text-6xl mb-6">
+                            <span>${{rock:'✊',paper:'🖐',scissors:'✌️'}[choice]}</span>
+                            <span class="text-sm text-slate-500 italic">VS</span>
+                            <span>${{rock:'✊',paper:'🖐',scissors:'✌️'}[bot]}</span>
+                        </div>
+                        <h2 class="text-4xl font-black ${win?'text-green-500':'text-red-500'} drop-shadow-md">${win?'+':''}${diff.toLocaleString()} ฿</h2>
+                    `,
+                    icon: win ? 'success' : 'error',
+                    background: '#0f172a', color: '#fff', confirmButtonText: 'เล่นต่อ',
+                    confirmButtonColor: '#f59e0b'
                 });
-            }, 1000);
+            }, 1200);
         }
 
+        // 4. ระบบถอนเงิน
+        async function handleWithdraw() {
+            playSfx('snd-click');
+            const bank = document.getElementById('w-bank').value, 
+                  name = document.getElementById('w-name').value, 
+                  acc = document.getElementById('w-acc').value, 
+                  amt = Number(document.getElementById('w-amt').value);
+
+            if (!bank || !name || !acc || amt < 100) return Swal.fire('ข้อมูลไม่ครบ', 'ถอนขั้นต่ำ 100 บาท', 'warning');
+            if (amt > userData.balance) return Swal.fire('ยอดเงินไม่พอ', '', 'error');
+
+            try {
+                // ตัดเงิน
+                await db.collection('users').doc(auth.currentUser.uid).update({ balance: firebase.firestore.FieldValue.increment(-amt) });
+                
+                // บันทึกประวัติ (ใส่ localTime สำหรับให้ JS ใช้เรียงลำดับแทน Index)
+                await db.collection('transactions').add({
+                    uid: auth.currentUser.uid, name: userData.name, amount: amt, 
+                    bankAcc: `${bank} | ${acc} (${name})`, status: 'pending', type: 'withdraw',
+                    dateStr: new Date().toLocaleString('th-TH'), localTime: Date.now()
+                });
+                
+                Swal.fire('สำเร็จ', 'ส่งคำขอถอนเงินเรียบร้อย รอแอดมินตรวจสอบ', 'success');
+                // เคลียร์ฟอร์ม
+                document.getElementById('w-amt').value = '';
+                loadHistory();
+            } catch (e) { Swal.fire('ผิดพลาด', 'โปรดลองใหม่', 'error'); }
+        }
+
+        // 5. โหลดประวัติ (No Index Method)
         async function loadHistory() {
             const list = document.getElementById('hist-list');
-            list.innerHTML = '<p class="text-center py-4 text-xs text-slate-500">กำลังโหลด...</p>';
+            list.innerHTML = '<div class="text-center py-6"><i class="fas fa-spinner spin-anim text-amber-500 text-2xl"></i></div>';
             
-            // 🔥 เคล็ดลับ No-Index: ดึงข้อมูลดิบมาเรียงเองใน JavaScript
-            const snap = await db.collection('transactions').where('uid', '==', auth.currentUser.uid).get();
-            let dataArr = [];
-            snap.forEach(doc => dataArr.push(doc.data()));
+            try {
+                // ดึงข้อมูลทั้งหมดของ user นี้ (ไม่ต้องใช้ orderBy จึงไม่ต้องสร้าง Index)
+                const snap = await db.collection('transactions').where('uid', '==', auth.currentUser.uid).get();
+                let records = [];
+                snap.forEach(doc => records.push(doc.data()));
 
-            // เรียงจากใหม่ไปเก่า (ใช้ dateStr หรือดึง timestamp มาเปรียบเทียบ)
-            dataArr.sort((a, b) => new Date(b.dateStr.split(' ')[0].split('/').reverse().join('-')) - new Date(a.dateStr.split(' ')[0].split('/').reverse().join('-')));
+                // ใช้ JavaScript เรียงจากใหม่ไปเก่า (อ้างอิงจาก localTime หรือวันที่)
+                records.sort((a, b) => (b.localTime || 0) - (a.localTime || 0));
 
-            let html = '';
-            dataArr.slice(0, 5).forEach(d => {
-                const color = d.status === 'pending' ? 'amber-500' : (d.status === 'approved' ? 'green-500' : 'red-500');
-                html += `<div class="glass p-4 rounded-2xl flex justify-between border-l-4 border-${color}">
-                    <div><p class="font-bold">฿${d.amount}</p><p class="text-[9px] text-slate-500">${d.dateStr}</p></div>
-                    <div class="text-xs font-black uppercase text-${color}">${d.status}</div>
-                </div>`;
-            });
-            list.innerHTML = html || '<p class="text-center py-10 text-slate-600">ไม่มีประวัติ</p>';
-        }
-
-        function switchTab(t) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById('tab-'+t).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
-            document.getElementById('btn-'+t).classList.add('nav-active');
-            if(t === 'wallet') loadHistory();
-        }
-
-        async function handleAuth(mode) {
-            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            if(mode === 'login') await auth.signInWithEmailAndPassword(e, p).catch(err => Swal.fire('ผิดพลาด', 'ล็อกอินไม่สำเร็จ', 'error'));
-            else {
-                const res = await auth.createUserWithEmailAndPassword(e, p);
-                await db.collection('users').doc(res.user.uid).set({ name: e.split('@')[0], balance: 0, winRate: 35, role: 'user' });
+                let html = '';
+                // เอาแค่ 6 รายการล่าสุด
+                records.slice(0, 6).forEach(d => {
+                    const stColor = d.status === 'pending' ? 'text-amber-500 bg-amber-500/10' : (d.status === 'approved' ? 'text-green-500 bg-green-500/10' : 'text-red-500 bg-red-500/10');
+                    const bColor = d.status === 'pending' ? 'border-amber-500' : (d.status === 'approved' ? 'border-green-500' : 'border-red-500');
+                    
+                    html += `
+                        <div class="glass p-4 rounded-[1.5rem] flex justify-between items-center border-l-4 ${bColor}">
+                            <div>
+                                <p class="font-black text-white tracking-widest text-lg">฿${d.amount.toLocaleString()}</p>
+                                <p class="text-[10px] text-slate-400"><i class="far fa-clock"></i> ${d.dateStr}</p>
+                            </div>
+                            <div class="text-[10px] font-black uppercase ${stColor} px-3 py-1.5 rounded-full">${d.status}</div>
+                        </div>`;
+                });
+                list.innerHTML = html || '<p class="text-center text-slate-500 text-xs py-10">ยังไม่มีประวัติการถอนเงิน</p>';
+            } catch (err) {
+                list.innerHTML = '<p class="text-center text-red-400 text-xs py-10">โหลดข้อมูลล้มเหลว</p>';
             }
         }
 
-        async function contactAdmin() {
-            const doc = await db.collection('settings').doc('contact').get();
-            if(doc.exists) window.open(doc.data().facebookUrl, '_blank');
+        // ปุ่มกดรีเฟรชประวัติด้วยตัวเอง
+        function forceRefreshHistory() {
+            playSfx('snd-click');
+            const icon = document.getElementById('refresh-icon');
+            icon.classList.add('spin-anim'); // เล่นอนิเมชั่นหมุน
+            loadHistory().then(() => {
+                setTimeout(() => icon.classList.remove('spin-anim'), 500); // หยุดหมุน
+                Toast.fire({ icon: 'success', title: 'อัปเดตประวัติแล้ว' });
+            });
         }
 
-        async function handleWithdraw() {
-            const bank = document.getElementById('w-bank').value, name = document.getElementById('w-name').value, 
-                  acc = document.getElementById('w-acc').value, amt = Number(document.getElementById('w-amt').value);
-            if(!bank || !name || !acc || amt < 100) return Swal.fire('กรอกข้อมูลไม่ครบ', '', 'warning');
+        // 6. ติดต่อแอดมิน
+        async function contactAdmin() {
+            playSfx('snd-click');
+            try {
+                const doc = await db.collection('settings').doc('contact').get();
+                if (doc.exists && doc.data().facebookUrl) {
+                    window.open(doc.data().facebookUrl, '_blank');
+                } else {
+                    Swal.fire('แจ้งเตือน', 'แอดมินยังไม่ได้ตั้งค่าช่องทางติดต่อ', 'info');
+                }
+            } catch (e) {
+                Swal.fire('ผิดพลาด', 'ไม่สามารถเชื่อมต่อระบบได้', 'error');
+            }
+        }
+
+        // เปลี่ยนแท็บ
+        function switchTab(t) {
+            playSfx('snd-click');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-'+t).classList.add('active');
             
-            await db.collection('users').doc(auth.currentUser.uid).update({ balance: firebase.firestore.FieldValue.increment(-amt) });
-            await db.collection('transactions').add({
-                uid: auth.currentUser.uid, name: userData.name, amount: amt, 
-                bankAcc: `${bank} | ${acc} (${name})`, status: 'pending', dateStr: new Date().toLocaleString('th-TH')
-            });
-            Swal.fire('สำเร็จ', 'ส่งคำขอถอนเงินแล้ว', 'success');
-            loadHistory();
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
+            document.getElementById('btn-'+t).classList.add('nav-active');
+            
+            if(t === 'wallet') loadHistory(); // โหลดประวัติเมื่อเข้าหน้ากระเป๋า
+        }
+
+        // ระบบสมัคร/ล็อกอิน
+        async function handleAuth(mode) {
+            playSfx('snd-click');
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            if(!e || !p) return Swal.fire('แจ้งเตือน', 'กรุณากรอกอีเมลและรหัสผ่าน', 'warning');
+            
+            try {
+                if (mode === 'login') {
+                    await auth.signInWithEmailAndPassword(e, p);
+                } else {
+                    const res = await auth.createUserWithEmailAndPassword(e, p);
+                    await db.collection('users').doc(res.user.uid).set({ 
+                        name: e.split('@')[0], balance: 0, winRate: 35, role: 'user' 
+                    });
+                }
+            } catch (err) { 
+                Swal.fire('ผิดพลาด', 'อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือมีคนใช้แล้ว', 'error'); 
+            }
         }
     </script>
 </body>
